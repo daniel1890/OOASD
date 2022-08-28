@@ -1,0 +1,37 @@
+@startuml mastermind
+
+skinparam class {
+BackgroundColor #FAFAFA
+ArrowColor Black
+BorderColor Black
+BackgroundColor<<Foo>> DarkGrey
+}
+skinparam classAttributeIconSize 0
+skinparam backgroundcolor Gray
+skinparam stereotypeCBackgroundColor YellowGreen
+
+class MastermindConsole {
+-game : MastermindGame
+-input : Scanner
+
+}
+
+class MastermindGame {
+-turns : int
+-secretCode : String
++getHint() : String
++isWon() : boolean
++maxTurnsUsed() : boolean
++generateSecretCode() : String
++checkCombination(guessString : String) : boolean
+}
+
+class Scanner #Physical {
+}
+
+MastermindGame "1" <-- "1" MastermindConsole
+Scanner "1" <-- "1" MastermindConsole
+
+
+
+@enduml
