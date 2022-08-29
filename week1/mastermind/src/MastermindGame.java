@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Random;
 
 public class MastermindGame {
@@ -17,7 +18,7 @@ public class MastermindGame {
     }
     // method which generates the code by using the Random number class
     public void generateSecretCode() {
-        String code = "";
+        StringBuilder code = new StringBuilder();
         Random rand = new Random();
 
         // loop 4 times to generate a String containing 4 color codes
@@ -27,23 +28,23 @@ public class MastermindGame {
 
             // color is B (blue)
             if(colorCode == 0) {
-                code += "B";
+                code.append("B");
             }
             // color is G(green)
             else if(colorCode == 1) {
-                code += "G";
+                code.append("G");
             }
             // color is Y(yellow)
             else if(colorCode == 2) {
-                code += "Y";
+                code.append("Y");
             }
             // color is R(red)
             else if(colorCode == 3) {
-                code += "R";
+                code.append("R");
             }
         }
 
-        this.secretCode = code;
+        this.secretCode = code.toString();
     }
 
     // method which checks the combination the player has input
@@ -52,32 +53,37 @@ public class MastermindGame {
         // test amount of correctly guessed characters on correct position
         char[] playerGuessCharacters  = guessString.toLowerCase().toCharArray();
         char[] secretCodeCharacters = secretCode.toLowerCase().toCharArray();
-        boolean[] correctCharacters = {false, false, false, false}; // array to track correctly guessed characters at right position
-        boolean[] correctColors = {false, false, false, false}; // array to track correctly guessed colors at wrong position
+        boolean[] correctColorsCorrectPosition = {false, false, false, false}; // array to track correctly guessed characters at right position
+        boolean[] correctColorsWrongPosition = {false, false, false, false}; // array to track correctly guessed colors at wrong position
         int minLength = Math.min(guessString.length(), secretCode.length());
         int correctPositionCounter = 0;
         int correctColorCounter = 0;
 
-        for(int i = 0; i < minLength; i++)
-        {
-            if (playerGuessCharacters[i] == secretCodeCharacters[i])
-            {
+        // for each character from the guessString compare to secretCode
+        for(int i = 0; i < minLength; i++) {
+            if (playerGuessCharacters[i] == secretCodeCharacters[i]) {
                 correctPositionCounter++;
-                correctCharacters[i] = true;
+                correctColorsCorrectPosition[i] = true;
             }
         }
 
+        // this method calculates the amount of correct colors are at the wrong position
+        // it iterates over each character from the guessString and compares to secretCode
+        // comparison gets ignored if correctColorsCorrectPosition[i] == true ||
+        // correctColorsWrongPosition[j] == true
         for(int i = 0; i < minLength; i++)
         {
-            if(!correctCharacters[i]) {
+            if(!correctColorsCorrectPosition[i]) {
                 for (int j = 0; j < minLength; j++) {
-                    if (playerGuessCharacters[j] == secretCodeCharacters[i] && !correctColors[j]) {
+                    if (playerGuessCharacters[j] == secretCodeCharacters[i] && !correctColorsWrongPosition[j] && !correctColorsCorrectPosition[j]) {
                         correctColorCounter++;
-                        correctColors[j] = true;
+                        correctColorsWrongPosition[j] = true;
+                        j = minLength;
                     }
                 }
             }
         }
+
         this.amountOfCorrectColorPositions = correctPositionCounter;
         this.amountOfCorrectColors = correctColorCounter;
         this.turns++;

@@ -18,6 +18,11 @@ class MastermindConsole {
 
 class MastermindGame {
 -turns : int
+-maxTurns : int
+-playerWon : boolean
+-amountOfCorrectColorPositions : int
+-amountOfCorrectColors : int
++MastermindGame() : MastermindGame
 -secretCode : String
 +getHint() : String
 +isWon() : boolean
